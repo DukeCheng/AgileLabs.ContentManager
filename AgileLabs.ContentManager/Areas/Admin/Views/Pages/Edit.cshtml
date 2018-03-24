@@ -1,0 +1,44 @@
+﻿@using Microsoft.AspNetCore.Mvc
+@model Page
+@{
+    ViewData["Title"] = "MiniAdmin HomePage";
+}
+
+<form asp-action="Edit" asp-controller="Pages" method="post">
+    @if (Model != null)
+            {
+        <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id" />
+        <input type="hidden" name="@nameof(Model.ParentPagesId)" value="@Model.ParentPagesId" />
+    }
+    <div style="margin-bottom:20px">
+        <label for="Url">Url</label>
+        <input asp-for="Url" class="easyui-textbox" />
+    </div>
+    <div style="margin-bottom:20px">
+        <label for="Title">Title</label>
+        <input asp-for="Title" class="easyui-textbox" />
+    </div>
+    <div style="margin-bottom:20px">
+        <input id="template-Id" class="easyui-combobox" style="width: 171px;" name="TemplateId" data-options="
+                   label:'Template:',
+                   valueField:'id',
+                   textField:'name',
+                   url: '@Url.Action("SelectedTemplate","Pages")',
+                   data:[{name:'@(ViewBag.AviliableTemplateName)',value:'@(Model.TemplateId)',selected:true}]" />
+    </div>
+    <button type="submit" class="easyui-linkbutton">Save</button>
+</form>
+
+<script type="text/javascript">
+
+    $('#template-Id').combobox({
+        onLoadSuccess: function () {
+            var val = $(this).combobox("getData");
+
+            if (val.length > 0) {
+                $(this).combobox("select", '@Model.TemplateId');
+            }
+        }
+    });
+
+</script>

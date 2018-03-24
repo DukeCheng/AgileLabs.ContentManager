@@ -1,0 +1,58 @@
+﻿@model Settings
+@{
+    ViewData["Title"] = "MiniAdmin HomePage";
+}
+
+
+<form id="create-or-edit-setting-form" asp-action="@(Model == null ? "Create" : "Edit")" method="post">
+    <button type="submit" class="easyui-linkbutton">Save</button>
+    @if (Model != null)
+    {
+        <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id"/>
+    }
+    <div style="margin-bottom: 20px; width: 500px;">
+        <div>
+            <label for="Category">Category:</label>
+        </div>
+        <input asp-for="Category" class="easyui-textbox" style="width: 500px;"/>
+    </div>
+    <div style="margin-bottom: 20px; width: 500px;">
+        <div>
+            <label for="Key">Key:</label>
+        </div>
+        <input asp-for="Key" class="easyui-textbox" style="width: 500px;"/>
+    </div>
+    <div style="margin-bottom: 20px; width: 500px;">
+        <div>
+            <label for="Value">Value:</label>
+        </div>
+        <textarea asp-for="Value" class="easyui-textbox" data-options="multiline:true"style="width: 500px; height: 140px; margin-bottom: 20px"></textarea>
+    </div>
+
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $('#create-or-edit-setting-form').form({
+                success: function (result) {
+                    var obj = JSON.parse(result);
+
+                    if (obj.error) {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: obj.errorMsg
+                        });
+                    } else {
+                        $.messager.show({
+                            title: 'Success',
+                            msg: obj.methodName + ' Success !'
+                        });
+                    }
+                }
+            });
+        });
+
+    </script>>
+}

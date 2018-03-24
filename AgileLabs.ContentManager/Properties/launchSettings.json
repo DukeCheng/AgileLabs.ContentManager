@@ -1,0 +1,22 @@
+{
+  "profiles": {
+    "AgileLabs.ContentManager-Development": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:55606/",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://0.0.0.0:55606/"
+    },
+    "AgileLabs.ContentManager-Staging": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "http://localhost:55606/",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Staging"
+      },
+      "applicationUrl": "http://0.0.0.0:55606/"
+    }
+  }
+}

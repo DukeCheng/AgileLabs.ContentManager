@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Mvc
+@model Page
+<form id="page-edit-template" asp-action="Edit" asp-controller="Pages" method="post">
+    @if (Model != null)
+    {
+        <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id" />
+        <input type="hidden" name="@nameof(Model.ParentPagesId)" value="@Model.ParentPagesId" />
+        <input type="hidden" name="@nameof(Model.Url)" value="@Model.Url">
+    }
+    <button type="submit" class="easyui-linkbutton">Save</button>
+    <div style="margin-bottom:20px">
+        <input asp-for="TemplateId" class="easyui-combotree" style="width:200px" value="@Model?.TemplateId" data-options="
+                   url:'@Url.Action("TreeJson","Templates")',
+                   method:'get',
+                   label:'Template:',
+                   labelPosition:'top'">
+    </div>
+
+    @*<div style="margin-bottom: 20px;">
+        <div>
+            <label for="HeadContent">HeadContent:</label>
+        </div>
+        <textarea asp-for="HeadContent" class="easyui-textbox" data-options="multiline:true" style="width: 700px; height: 140px; margin-bottom: 20px" readonly></textarea>
+    </div>*@
+    @*<div style="margin-bottom:20px">
+        <div>
+            <label for="BodyContent">BodyContent:</label>
+        </div>
+        <textarea asp-for="BodyContent" class="easyui-textbox" data-options="multiline:true" style="width: 1400px; height: 700px; margin-bottom: 20px" readonly></textarea>
+    </div>*@
+
+    @*<div style="margin-bottom: 20px;width: 500px;">
+        <label for="FootContent">FootContent:</label>
+        <textarea asp-for="FootContent" class="easyui-textbox" data-options="multiline:true" style="width:700px;;height:140px;margin-bottom:20px" readonly></textarea>
+    </div>*@
+</form>
+
+<script type="text/javascript">
+    $(function () {
+        $('#page-edit-template').form({
+            success: function (result) {
+                if (result.error) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $.messager.show({
+                        title: 'Success',
+                        msg: "Update Success"
+                    });
+                }
+            }
+        });
+    });
+
+</script>

@@ -1,0 +1,57 @@
+﻿@model Page
+<form id="page-edit-seo" asp-action="Edit" asp-controller="Pages" method="post">
+    @if (Model != null)
+    {
+        <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id" />
+        <input type="hidden" name="@nameof(Model.ParentPagesId)" value="@Model.ParentPagesId" />
+    }
+    <button type="submit" class="easyui-linkbutton">Save</button>
+    <div style="margin-bottom:20px">
+        <div>
+            <label for="Url">Url:</label>
+        </div>
+        <input asp-for="Url" class="easyui-textbox"  style="width:500px;"/>
+    </div>
+    <div style="margin-bottom: 20px">
+        <div>
+            <label for="Title">Title:</label>
+        </div>
+        <input asp-for="Title" class="easyui-textbox" style="width:500px;"/>
+    </div>
+
+    <div style="margin-bottom: 20px">
+        <div>
+            <label for="Title">Keywords:</label>
+        </div>
+        <input asp-for="SeoInfo.Keywords" class="easyui-textbox" style="width:500px;"/>
+    </div>
+
+    <div style="margin-bottom: 20px">
+        <div>
+            <label for="Title">Description:</label>
+        </div>
+        <textarea asp-for="SeoInfo.Description" class="easyui-textbox" data-options="multiline:true" style="width:500px;height:140px;margin-bottom:20px"></textarea>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $(function() {
+        $('#page-edit-seo').form({
+            success: function (result) {
+                if (result.error) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $.messager.show({
+                        title: 'Success',
+                        msg: "Update Success"
+                    });
+                }
+            }
+        });
+    });
+
+</script>

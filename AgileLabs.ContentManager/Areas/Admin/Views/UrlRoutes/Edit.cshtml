@@ -1,0 +1,57 @@
+﻿@model UrlRecord
+@{
+    ViewData["Title"] = "MiniAdmin HomePage";
+}
+
+<form id="create-or-edit-urlRout-form" asp-action="@(Model == null ? "Create" : "Edit")" method="post">
+    <button type="submit" class="easyui-linkbutton">Save</button>
+    @if (Model != null)
+    {
+        <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id"/>
+    }
+    <div style="margin-bottom: 20px; width: 500px;">
+        <div>
+            <label for="Slug">Slug：</label>
+        </div>
+        <input type="text" asp-for="Slug" class="easyui-textbox" style="width: 500px;"/>
+    </div>
+    <div style="margin-bottom: 20px; width: 500px;">
+        <div>
+            <label for="Type">Type：</label>
+        </div>
+        <select asp-for="Type" asp-items="Html.GetEnumSelectList<UrlRecordType>()" class="easyui-combobox" style="width: 500px;"></select>
+        <p class="help-block">Example block-level help text here.</p>
+    </div>
+    <div style="margin-bottom: 20px; width: 500px;">
+        <div>
+            <label for="RefValue">RefValue：</label>
+        </div>
+        <input type="text" asp-for="RefValue" class="easyui-textbox" style="width: 500px;"/>
+    </div>
+</form>
+
+@section scripts{
+    <script type="text/javascript">
+
+        $(function () {
+            $('#create-or-edit-urlRout-form').form({
+                success: function (result) {
+                    var obj = JSON.parse(result);
+
+                    if (obj.error) {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: obj.errorMsg
+                        });
+                    } else {
+                        $.messager.show({
+                            title: 'Success',
+                            msg: obj.methodName + ' Success !'
+                        });
+                    }
+                }
+            });
+        });
+
+    </script>>
+}

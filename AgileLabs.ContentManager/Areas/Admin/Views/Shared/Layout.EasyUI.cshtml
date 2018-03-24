@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CMS</title>
+    <link rel="stylesheet" type="text/css" href="~/vendor/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/easyui/themes/icon.css">
+    <script type="text/javascript" src="~/vendor/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="~/vendor/easyui/jquery.easyui.min.js"></script>
+  
+    @*<!-- 配置文件 -->
+    <script type="text/javascript" src="@Url.Content("~/vendor/ueditor/ueditor.config.js")"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="@Url.Content("~/vendor/ueditor/ueditor.all.js")"></script>*@
+</head>
+<body>
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'north',border:false" style="height:38px">
+            @await Html.PartialAsync("TopMenu")
+        </div>
+        @if (IsSectionDefined("west"))
+        {
+            <div data-options="region:'west',split:false" style="width:300px;padding:10px;">
+                @RenderSection("west", required: false)
+            </div>
+        }
+        <div id="center-panel" data-options="region:'center'">
+            @RenderBody()
+        </div>
+    </div>
+    <script src="~/js/ajaxformsubmitfilter.js"></script>
+    @RenderSection("temp", required: false)
+    @RenderSection("scripts", required: false)
+</body>
+</html>

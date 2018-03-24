@@ -1,0 +1,20 @@
+﻿@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Page
+@{
+    ViewData["Title"] = "MiniAdmin HomePage";
+}
+<div id="managepage-tab" class="easyui-tabs" data-options="fit:true,border:false,plain:true">
+    <div title="Seo" style="padding:5px">
+        @await Html.PartialAsync("EditSeo", Model)
+    </div>
+    <div title="Preview" style="padding:5px">
+        <iframe src="@Url.Action("DynamicPage","DynamicContent",new{area=string.Empty, pageId=Model.Id})" scrolling="auto" frameborder="0" style="width:100%;height:99.5%;border:0;"></iframe>
+    </div>
+    <div title="Template" style="padding:5px">
+        @await Html.PartialAsync("EditTemplate", Model)
+    </div>
+    @*<div title="Componets" style="padding:5px">
+            @await Html.PartialAsync("Edit", Model)
+        </div>*@
+</div>

@@ -1,0 +1,85 @@
+﻿@using Microsoft.AspNetCore.Mvc
+@{
+    Layout = "~/Areas/Admin/Views/Shared/Layout.EasyUI.cshtml";
+}
+
+<!--数据展示 -->
+<div data-options="region:'center',fit:true,split:false,border:false">
+    <table id="urlRecord-dataGrid" style="width:100%"></table>
+</div>
+
+@section scripts{
+    <script type="text/javascript">
+
+        var datagrid; //定义全局变量
+        var editRow = ""; //定义当前编辑的行
+
+        datagrid = $("#urlRecord-dataGrid").datagrid({
+            title: "UrlRoutes",
+            border: false,
+            locale: "zh_CN",
+            //iconCls: 'icon-save',
+            striped: true,
+            sortOrder: "desc",
+            collapsible: false,
+            url: "@Url.Action("GetUrlRoutesList", "UrlRoutes")",
+            queryParams: { dtNumber: "", dtTitle: "" },
+            method: 'get',
+            columns: [
+                [
+                    { field: 'id', title: 'id', width: '5%', algin: 'center' ,hidden:true},
+                    { field: 'slug', title: 'slug', width: '35%', align: 'center' },
+                    { field: 'typeStr', title: 'typeStr', width: '20%', align: 'center' },
+                    { field: 'refValue', title: 'refValue', width: '30%', align: 'center' },
+                    { field: 'creationTime', title: 'creationTime', width: '14%', align: 'center' },
+                ]
+            ],
+            toolbar: [
+                {
+                    id: 'btnAdd',
+                    text: "添加",
+                    iconCls: 'icon-add',
+                    handler: function() {
+                        window.location.href = '@Url.Action("Create", "UrlRoutes")';
+                    }
+                }, {
+                    id: 'btnEdit',
+                    text: "修改",
+                    iconCls: 'icon-edit',
+                    handler: function() {
+                        var row = $('#urlRecord-dataGrid').datagrid("getSelections");
+                        if (row.length === 0) {
+                            $.messager.show({
+                                title: '警告',
+                                msg: "请先选择您要编辑的行"
+                            });
+                            return;
+                        }
+
+                        window.location.href = '/Admin/UrlRoutes/Edit?id=' + row[0].id;
+                    }
+                }
+            ],
+            pagination: true, //表示在datagrid设置分页
+            rownumbers: false,
+            singleSelect: true,
+        });
+
+        $('#urlRecord-dataGrid').datagrid('getPager').pagination({
+            pageSize: 10,
+            pageNumber: 1,
+            pageList: [10, 20, 50],
+            beforePageText: '第', //页数文本框前显示的汉字
+            afterPageText: '页    共 {pages} 页',
+            displayMsg: '当前显示 {from} - {to} 条记录   共 {total} 条记录',
+        });
+
+        //条件查询
+        function Search() {
+            var queryParameter = $('#urlRecord-dataGrid').datagrid("options").queryParams;
+            queryParameter.dtNumber = $("#dtNumber").val();
+            queryParameter.dtTitle = $("#dtTitle").val();
+            $("#urlRecord-dataGrid").datagrid("reload");
+        }
+    </script>
+}

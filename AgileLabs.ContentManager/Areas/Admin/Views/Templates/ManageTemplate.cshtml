@@ -1,0 +1,87 @@
+﻿@using Microsoft.AspNetCore.Mvc
+@model Template
+@{
+    ViewData["Title"] = "MiniAdmin HomePage";
+}
+
+<div id="managepage-tab" data-options="fit:true,border:false,plain:true" style="padding:5px 5px;">
+    <form id="fm_tempate_edit" asp-action="Edit" asp-controller="Templates" method="post">
+        @if (Model != null)
+        {
+            <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id" />
+            <input type="hidden" name="@nameof(Model.ParentTemplateId)" value="@Model.ParentTemplateId" />
+        }
+        <div style="margin-bottom: 20px">
+            <div style="text-align: left; float: left; padding-right: 1000px;">
+                <button type="submit" class="easyui-linkbutton" style="width:80px;">Save</button>
+            </div>
+            <div style="margin-bottom: 20px; width: 1400px;">
+                    <label for="Name" style="margin-top: 10px;">Name:</label>
+                    <input asp-for="Name" class="easyui-textbox" />
+            </div>
+        </div>
+        @*<div style="margin-bottom: 20px;">
+                <div>
+                    <label for="HeadContent">HeadContent:</label>
+                </div>
+                <textarea asp-for="HeadContent" class="easyui-textbox" data-options="multiline:true" style="width: 700px; height: 140px; margin-bottom: 20px"></textarea>
+            </div>*@
+        @*<div style="margin-bottom:20px">
+                <label for="BodyContent">BodyContent:</label>
+
+                <script id="bodyContent" name="BodyContent" type="text/plain">
+                    @Html.Raw(Model?.BodyContent)
+                </script>
+            </div>*@
+        <div style="margin-bottom: 20px">
+
+            <div>
+                <label for="BodyContent">BodyContent:</label>
+            </div>
+            <textarea asp-for="BodyContent" class="easyui-textbox" data-options="multiline:true" style="width: 1400px; height: 700px; margin-bottom: 20px"></textarea>
+        </div>
+        @*<div style="margin-bottom: 20px;width: 500px;">
+                <label for="FootContent">FootContent:</label>
+                <textarea asp-for="FootContent" class="easyui-textbox" data-options="multiline:true" style="width:700px;;height:140px;margin-bottom:20px"></textarea>
+            </div>*@
+
+    </form>
+</div>
+
+
+<!-- 实例化编辑器 -->
+<script type="text/javascript">
+
+    //UE.delEditor("bodyContent");
+
+    //var editor = UE.getEditor('bodyContent',
+    //    {
+    //        allowDivTransToP: false,
+    //        //toolbars: [
+    //        //    ['fullscreen', 'source', 'undo', 'redo', 'bold']
+    //        //],
+    //        autoHeightEnabled: true,
+    //        autoFloatEnabled: true,
+    //        initialFrameHeight: 500,
+    //        initialFrameWidth: 700
+    //    });
+
+    $(function () {
+        $('#fm_tempate_edit').form({
+            success: function (result) {
+                if (result.error) {
+                    $.messager.show({
+                        title: 'Error',
+                        msg: result.errorMsg
+                    });
+                } else {
+                    $.messager.show({
+                        title: 'Success',
+                        msg: "Update Success"
+                    });
+                }
+            }
+        });
+    });
+</script>
+

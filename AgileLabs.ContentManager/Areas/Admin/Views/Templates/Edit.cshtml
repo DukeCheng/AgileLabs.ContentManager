@@ -1,0 +1,59 @@
+﻿@model Template
+@{
+    ViewData["Title"] = "MiniAdmin HomePage";
+}
+
+<form id="fm_tempate_edit" asp-action="@(Model==null?"Create":"Edit")" method="post">
+    @if (Model != null)
+    {
+        <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id" />
+    }
+    <div class="form-group">
+        <label for="Name">Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="ParentTemplateId">ParentTemplate</label>
+        <select asp-for="ParentTemplateId" asp-items="@ViewBag.AviliableTemplates"></select>
+    </div>
+    <div class="form-group">
+        <label for="HeadContent">HeadContent</label>
+        <!-- 加载编辑器的容器 -->
+        @*<script id="headContent" name="HeadContent" type="text/plain">
+                @Html.Raw(Model?.HeadContent)
+            </script>*@
+        <textarea asp-for="HeadContent" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="BodyContent">BodyContent</label>
+        <!-- 加载编辑器的容器 -->
+        <script id="bodyContent" name="BodyContent" type="text/plain">
+            @Html.Raw(Model?.BodyContent)
+        </script>
+    </div>
+    <div class="form-group">
+        <label for="FootContent">FootContent</label>
+        <textarea asp-for="FootContent" class="form-control"></textarea>
+    </div>
+    <button type="submit" class="btn btn-default">Save</button>
+</form>
+
+@section scripts
+    {
+    <!-- 配置文件 -->
+    <script type="text/javascript" src="@Url.Content("~/vendor/ueditor/ueditor.config.js")"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="@Url.Content("~/vendor/ueditor/ueditor.all.js")"></script>
+    <!-- 实例化编辑器 -->
+    <script type="text/javascript">
+        var editor = UE.getEditor('bodyContent', {
+            allowDivTransToP: false,
+            //toolbars: [
+            //    ['fullscreen', 'source', 'undo', 'redo', 'bold']
+            //],
+            autoHeightEnabled: true,
+            autoFloatEnabled: true,
+            initialFrameHeight: 500
+        });
+    </script>
+}

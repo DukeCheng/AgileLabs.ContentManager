@@ -1,0 +1,75 @@
+﻿@model Widget
+@{
+    Layout = "~/Areas/Admin/Views/Shared/Layout.EasyUI.cshtml";
+}
+
+
+<form id="create-or-edit-from" asp-action="@(Model == null ? "Create" : "Edit")" method="post">
+    <button type="submit" class="easyui-linkbutton">Save</button>
+    @if (Model != null)
+    {
+        <input type="hidden" name="@nameof(Model.Id)" value="@Model.Id"/>
+    }
+    <div style="margin-bottom: 20px; width: 500px;">
+        <div>
+            <label for="Name" style="margin-top: 10px;">Name:</label>
+        </div>
+        <input asp-for="Name" class="easyui-textbox"/>
+    </div>
+    <div style="margin-bottom: 20px;">
+        <div>
+            <label for="HeadContent">HeadContent:</label>
+        </div>
+        <textarea asp-for="HeadContent" class="easyui-textbox" data-options="multiline:true" style="width: 700px; height: 140px; margin-bottom: 20px"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="BodyContent">BodyContent</label>
+        <!-- 加载编辑器的容器 -->
+        <script id="bodyContent" name="BodyContent" type="text/plain">
+            @Html.Raw(Model?.BodyContent)
+        </script>
+    </div>
+    <div style="margin-bottom: 20px; width: 500px;">
+        <label for="FootContent">FootContent:</label>
+        <textarea asp-for="FootContent" class="easyui-textbox" data-options="multiline:true" style="width: 700px; ; height: 140px; margin-bottom: 20px"></textarea>
+    </div>
+
+</form>
+
+@section scripts {
+    <script type="text/javascript">
+
+        UE.delEditor("bodyContent");
+        var editor = UE.getEditor('bodyContent', {
+            allowDivTransToP: false,
+            //toolbars: [
+            //    ['fullscreen', 'source', 'undo', 'redo', 'bold']
+            //],
+            autoHeightEnabled: true,
+            autoFloatEnabled: true,
+            initialFrameHeight: 500,
+            initialFrameWidth: 700
+        });
+
+        $(function () {
+            $('#create-or-edit-from').form({
+                success: function (result) {
+                    var obj = JSON.parse(result);
+
+                    if (obj.error) {
+                        $.messager.show({
+                            title: 'Error',
+                            msg: obj.errorMsg
+                        });
+                    } else {
+                        $.messager.show({
+                            title: 'Success',
+                            msg: obj.methodName + ' Success !'
+                        });
+                    }
+                }
+            });
+        });
+
+    </script>
+}

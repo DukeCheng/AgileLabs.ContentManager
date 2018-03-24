@@ -1,0 +1,120 @@
+﻿@using Microsoft.AspNetCore.Mvc
+@using Microsoft.AspNetCore.Mvc.Rendering
+@model Pager<Template>
+@{
+    ViewData["Title"] = "Templates";
+    Layout = "~/Areas/Admin/Views/Shared/Layout.EasyUI.cshtml";
+}
+@section west{
+    <ul id="template-tree" class="easyui-tree" data-options="url:'@Url.Action("TreeJson","Templates", new { area = "Admin" })',method:'get'"></ul>
+}
+
+ This is template page
+
+@section temp   {
+    <div id="templateNodeContextMenu" class="easyui-menu" style="width:120px;">
+        <div onclick="append()" data-options="iconCls:'icon-add'">Append</div>
+        <div onclick="removeit()" data-options="iconCls:'icon-remove'">Remove</div>
+        @*<div class="menu-sep"></div>
+        <div onclick="expand()">Expand</div>
+        <div onclick="collapse()">Collapse</div>*@
+    </div>
+
+    <div id="dlg" method="post" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+         closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">Templates Create</div>
+        <form id="fm" method="post">
+            <div class="fitem">
+                <label>Name:</label>
+                <input name="Name" class="easyui-validatebox" required="true">
+                <input id="ParentTemplateId" name="ParentTemplateId" hidden>
+            </div>
+        </form>
+        <div id="dlg-buttons">
+            <a href="#" class="easyui-linkbutton" iconCls="icon-ok" onclick="save()">Save</a>
+            <a href="#" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')">Cancel</a>
+        </div>
+    </div>}
+
+@section scripts{
+    <script type="text/javascript">
+        $('#template-tree').tree({
+            onClick: function (node) {
+                if (node.attributes.url != null)
+                    $('#center-panel').panel('open').panel('refresh', node.attributes.url);
+            },
+            onContextMenu: function (e, node) {
+                e.preventDefault();
+                $(this).tree('select', node.target);
+                $('#templateNodeContextMenu').menu('show', { left: e.pageX, top: e.pageY });
+            }
+        });
+
+        function append() {
+            $('#dlg').dialog('open').dialog('setTitle', 'Append');
+            $('#fm').form('clear');
+            document.getElementById("ParentTemplateId").value = $('#template-tree').tree('getSelected').id;
+        };
+
+        function save() {
+            $('#fm').form('submit',
+                {
+                    //url: '/Admin/Templates/Create',
+                    url:'@Url.Action("Create", "Templates", new { area="Admin"})',
+                    onSubmit: function () {
+                        return $(this).form('validate');
+                    },
+                    success: function (result) {
+                        //var result = eval('(' + result + ')');
+                        if (result.error) {
+                            $.messager.show({
+                                title: 'Error',
+                                msg: result.errorMsg
+                            });
+                        } else {
+                            $('#dlg').dialog('close'); // close the dialog
+
+                            //刷新树
+                            $('#template-tree').tree({
+                                onClick: function (node) {
+                                    $('#center-panel').panel('open').panel('refresh', node.attributes.url);
+                                },
+                            });
+                        }
+                    }
+                });
+        };
+
+        function removeit() {
+            var node = $('#template-tree').tree('getSelected');
+            $.ajax({
+                url: '/admin/templates/delete',
+                data: { Id: node.id },
+                type: 'post',
+                success: function (result) {
+                    if (result === true) {
+                        $.messager.alert(result.errorMsg, 'deleted fail!');
+                    }
+
+                    $.messager.alert('Warning', 'deleted success!');
+                    $('#template-tree').tree({
+                        onClick: function (node) {
+                            $('#center-panel').panel('open').panel('refresh', node.attributes.url);
+                        }
+                    });
+                }
+            });
+        };
+
+        //function expand() {
+        //    var node = $('#template-tree').tree('getSelected');
+        //    $('#template-tree').tree('expand', node.target);
+        //};
+
+        //function collapse() {
+        //    var node = $('#template-tree').tree('getSelected');
+        //    $('#template-tree').tree('collapse', node.target);
+        //}
+
+    </script>
+}
